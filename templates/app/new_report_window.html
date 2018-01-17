@@ -1,0 +1,54 @@
+<div id="new_report_window" data-tribe="{{ current_user.tribe.element.en }}">
+    <div class="row header">
+        <div class="col s2 ha-mid va-mid" id="cancel_new_report"><i class="material-icons">arrow_back</i></div>
+        <div class="col s8 ha-mid va-mid title">Nova Participação</div>
+        <div class="col s2 ha-mid va-mid" id="send_new_report"><i class="material-icons">done</i></div>
+    </div>
+    <div class="body">
+        <div class="title"><i class="material-icons">assignment</i><span>Categoria</span></div>
+        <div id="cat-display" class="row" data-sub-cat-id="" style="display:none;">
+            <div class="col s10 va-mid ha-left">
+                <span class="main-cat-name"></span>
+                <span class="sub-cat-name"></span>
+            </div>
+            <div class="col s2 va-mid ha-mid" id="clear_cat_selection"><i class="material-icons">clear</i></div>
+        </div>
+        <div id="report-categories">
+            {% for cat in report_categories -%}
+                <div class="cat" data-cat-id="{{ cat.id }}">
+                    <span class="name">{{ cat.name.pt }}</span><div><i class="material-icons">done</i></div>
+                </div>
+                <div class="subs" data-parentcat-id="{{ cat.id }}">
+                    {% for scat in cat.sub_categories|category_order_by('name_pt') -%}
+                        <div class="sub-cat" data-cat-id="{{ scat.id }}">
+                            <span class="name">{{ scat.name.pt }}</span><div><i class="material-icons">done</i></div>
+                        </div>
+                    {%- endfor %}
+                </div>
+            {%- endfor  %}
+        </div>
+
+        <section class="local">
+            <div class="title"><i class="material-icons">location_on</i><span>Localização</span></div>
+            <div class="row" id="location_type_selector">
+                <div class="col s6 ha-mid va-mid selected" option="location">Automática</div>
+                <div class="col s6 ha-mid va-mid" option="other">Manual</div>
+            </div>
+            <div id="map_picker" style="display:none;"></div>
+        </section>
+        <section class="desc">
+            <div class="title"><div class="material-icons">comment</div><span>Comentário</span></div>
+            <textarea name="" id="report_comment" placeholder="Deixe um comentário/descrição do problema"></textarea>
+        </section>
+        <section class="images">
+            <div class="title"><div class="material-icons">photo_camera</div><span>Fotos</span></div>
+            <span class="warning"><span>AVISO:</span> Este campo não é obrigatório, assim como o comentário serve apenas para nos ajudar perceber melhor a sua participação</span>
+            <div class="row">
+                <div class="col s6 va-mid ha-left"><label for="report_files"><i class="material-icons">add_to_photos</i><span>Adicionar</span></label></div>
+                <div class="col s6 va-mid ha-right" id="file_count">0 ficheiros adicionados</div>
+            </div>
+            <input type="file" id="report_files" name="file" accept="image/*" multiple>
+            <div id="report_photos"></div>
+        </section>
+    </div>
+</div>

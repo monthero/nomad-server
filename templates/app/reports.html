@@ -1,0 +1,71 @@
+{% extends "app/view_modal.html" %}
+
+{% block vm_attrs %}data-tribe="{{ current_user.tribe.element.en }}"{% endblock %}
+{% block header_type %}regular{% endblock %}
+{% block header_content %}
+    <div class="col s2 ha-mid va-mid" id="view_title_icon"><i class="material-icons">new_releases</i></div>
+	<div class="col s8 ha-left va-mid" id="view_title">Participações</div>
+	<div class="col s2 ha-mid va-mid" id="close_view"><i class="material-icons">close</i></div>
+{% endblock %}
+{% block body_type %}reports{% endblock %}
+{% block body_content %}
+    <div id="general" class="tab show">
+		<div class="report_list block" id="waiting">
+            <div class="title block">à espera</div>
+            {% for rep in waiting %}
+            <div class="row report" data-report-id="{{ rep.id }}">
+                <div class="col s10 ha-left va-mid">
+                    <div class="date">{{ rep.created_at|humanize_date }}</div><div class="desc">{{ rep.description|truncate(length=140) }}</div>
+                </div>
+                <div class="col s2 ha-mid va-mid">
+                    <i class="material-icons">info_outline</i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+		<div class="report_list block" id="analysis">
+            <div class="title block">em análise</div>
+            {% for rep in analysis %}
+            <div class="row report" data-report-id="{{ rep.id }}">
+                <div class="col s10 ha-left va-mid">
+                    <div class="date">{{ rep.created_at|humanize_date }}</div><div class="desc">{{ rep.description|truncate(length=140) }}</div>
+                </div>
+                <div class="col s2 ha-mid va-mid">
+                    <i class="material-icons">info_outline</i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+		<div class="report_list block" id="solved">
+            <div class="title block">resolvidas</div>
+            {% for rep in solved %}
+            <div class="row report" data-report-id="{{ rep.id }}">
+                <div class="col s10 ha-left va-mid">
+                    <div class="date">{{ rep.created_at|humanize_date }}</div><div class="desc">{{ rep.description|truncate(length=140) }}</div>
+                </div>
+                <div class="col s2 ha-mid va-mid">
+                    <i class="material-icons">info_outline</i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+		<div class="report_list block" id="special">
+            <div class="title block">casos especiais</div>
+            {% for rep in special %}
+            <div class="row report" data-report-id="{{ rep.id }}">
+                <div class="col s10 ha-left va-mid">
+                    <div class="date">{{ rep.created_at|humanize_date }}</div><div class="desc">{{ rep.description|truncate(length=140) }}</div>
+                </div>
+                <div class="col s2 ha-mid va-mid">
+                    <i class="material-icons">info_outline</i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+	</div>
+	<div id="report_page" class="tab"></div>
+    <i class="material-icons" id="add_report_button">add</i>
+{% endblock %}
+
+
+

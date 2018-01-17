@@ -1,0 +1,5 @@
+<div id="view_modal" {% block vm_attrs %}{% endblock %}>
+    <div class="header row" data-type="{% block header_type %}{% endblock %}">{% block header_content %}{% endblock %}</div>
+    <div class="body" data-type="{% block body_type %}{% endblock %}">{% block body_content %}{% endblock %}</div>
+    <div class="view_nav row" data-type="{% block view_nav_type %}{% endblock %}">{% block view_nav_content %}{% endblock %}</div>
+</div>

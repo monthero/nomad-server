@@ -1,0 +1,107 @@
+{% extends "admin_area.html" %}
+
+{% block title %}Local Nomad{% endblock %}
+
+{% block styles %}{% endblock %}
+
+{% block admin_title %}Utilizadores{% endblock %}
+
+{% block active1 %}active{% endblock %}
+
+{% block content %}
+    <section class="users">
+        <div class="row nav">
+            <div class="col s4 ha-left va-mid">Utilizadores</div>
+            <div class="col s8 ha-right va-mid">
+                <button class="table_toggle pressed" data-value="blocked_users">Bloqueados</button>
+                <button class="table_toggle pressed" data-value="active_users">Activos</button>
+            </div>
+        </div>
+        <!-- BLOCKED USERS -->
+        <div class="table users" id="blocked_users">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Utilizadores Bloqueados</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option users" data-action="delete"
+                       title="apagar utilizadores selecionados">delete</i>
+                    <i class="material-icons general_option users" data-action="unblock"
+                       title="desbloquear utilizadores selecionados">lock_open</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="blocked_users_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="blocked_users_toggle_check" class="general_toggle"
+                           data-table="blocked_users">
+                </div>
+                <div class="col s3 ha-left va-mid">Username</div>
+                <div class="col s4 ha-left va-mid">Email</div>
+                <div class="col s2 ha-left va-mid">Género</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for user in blocked_users %}
+                <div class="row user" user-id="{{ user.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_user_{{ user.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_user_{{ user.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ user.username }}</div>
+                    <div class="col s4 ha-left va-mid">{{ user.email }}</div>
+                    <div class="col s2 ha-left va-mid">{{ 'Masculino' if user.gender == 0 else 'Feminino' }}</div>
+                    <div class="col s3 ha-mid va-mid noselect">
+                        <i class="material-icons user_option" data-action="delete"
+                           title="apagar utilizador">delete</i>
+                        <i class="material-icons user_option" data-action="unblock"
+                           title="desbloquear utilizador">lock_open</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- ACTIVE USERS -->
+        <div class="table users" id="active_users">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Utilizadores Activos</div>
+                <div class="col s6 ha-right va-mid">
+                    <i class="material-icons general_option users" data-action="delete"
+                       title="apagar utilizadores selecionados">delete</i>
+                    <i class="material-icons general_option users" data-action="block"
+                       title="bloquear utilizadores selecionados">block</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="active_users_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="active_users_toggle_check" class="general_toggle"
+                           data-table="active_users">
+                </div>
+                <div class="col s3 ha-left va-mid">Username</div>
+                <div class="col s4 ha-left va-mid">Email</div>
+                <div class="col s2 ha-left va-mid">Género</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for user in active_users %}
+                <div class="row user" user-id="{{ user.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_user_{{ user.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_user_{{ user.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ user.username }}</div>
+                    <div class="col s4 ha-left va-mid">{{ user.email }}</div>
+                    <div class="col s2 ha-left va-mid">{{ 'Masculino' if user.gender == 0 else 'Feminino' }}</div>
+                    <div class="col s3 ha-mid va-mid noselect">
+                        <i class="material-icons user_option" data-action="delete"
+                           title="apagar utilizador">delete</i>
+                        <i class="material-icons user_option" data-action="block"
+                           title="bloquear utilizador">block</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

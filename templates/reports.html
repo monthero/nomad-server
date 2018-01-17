@@ -1,0 +1,384 @@
+{% extends "admin_area.html" %}
+
+{% block title %}Local Nomad{% endblock %}
+
+{% block styles %}{% endblock %}
+
+{% block admin_title %}Participações{% endblock %}
+{% block active2 %}active{% endblock %}
+{% block content %}
+    <section class="reports">
+        <div class="row nav">
+            <div class="col s3 ha-left va-top">Participações</div>
+            <div class="col s9 ha-right va-top">
+                <button class="table_toggle pressed" data-value="new_reports">Novas</button>
+                <button class="table_toggle pressed" data-value="active_reports">Em Análise</button>
+                <button class="table_toggle pressed" data-value="solved_reports">Resolvidas</button>
+                <button class="table_toggle pressed" data-value="special_cases_reports">Casos Especiais</button>
+
+                <!--
+                                <div class="row">
+                                    <div class="col s12 ha-right va-mid">
+                                        <select name="" id="secondary_report_types" style="visibility: hidden;">
+                                            <option value="-1">Todas</option>
+                                            {% for rt in report_types %}
+                                                {% if rt.parent %}<option value="{{ rt.id }}" data-parent="
+                                {{ rt.parent.id }}">{{ rt.name }}</option>{% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <select name="" id="main_report_types">
+                                            <option value="-1">Todas</option>
+                                            {% for rt in report_types %}
+                                                {% if not rt.parent %}<option value="{{ rt.id }}">{{ rt.name }}</option>
+                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                -->
+            </div>
+        </div>
+        <div class="table reports" id="new_reports">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Novas</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option reports" data-action="delete"
+                       title="Apagar participações selecionadas">delete</i><i
+                        class="material-icons general_option reports" data-action="analize"
+                        title="Passar para 'Em Análise'">assessment</i><i
+                        class="material-icons general_option reports" data-action="done"
+                        title="Passar para 'Resolvidas'">done_all</i><i
+                        class="material-icons general_option reports" data-action="special"
+                        title="Passar para 'Casos Especiais'">folder_special</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="new_reports_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="new_reports_toggle_check" data-table="new_reports"
+                           class="general_toggle">
+                </div>
+                <div class="col s3 ha-left va-mid">Submetida por</div>
+                <div class="col s4 ha-left va-mid">Categoria</div>
+                <div class="col s2 ha-left va-mid">Data de submissão</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+
+            {% for rep in new_reports %}
+                <div class="row report" report-id="{{ rep.id }}" data-rtype="{{ rep.category.id }}"
+                     data-prtype="{{ rep.category.parent_category.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_report_{{ rep.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_report_{{ rep.id }}">
+                    </div>
+
+                    <div class="col s3 ha-left va-mid">{{ rep.user.name }}</div>
+                    <div class="col s4 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ rep.humanized_date }}</div>
+                    <div class="col s3 ha-mid va-mid">
+                        <i class="material-icons report_option" data-action="info"
+                           title="Ver detalhes">info</i>
+                        <i class="material-icons report_option" data-action="delete"
+                           title="Apagar participação">delete</i><i
+                            class="material-icons report_option" data-action="analize"
+                            title="Passar para 'Em Análise'">assessment</i><i
+                            class="material-icons report_option" data-action="done"
+                            title="Passar para 'Resolvidas'">done</i><i
+                            class="material-icons report_option" data-action="special"
+                            title="Passar para 'Casos Especiais'">folder_special</i>
+                    </div>
+                </div>
+                <div class="report_info" for="{{ rep.id }}">
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Categoria</div>
+                        <div class="col s7 ha-left va-mid">{{ rep.category.parent_category.name.pt }}</div>
+                        <div class="col s3 ha-right va-mid">
+                            <span>Submetida</span><span>{{ rep.humanized_date }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Sub-categoria</div>
+                        <div class="col s10 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Submetida por</div>
+                        <div class="col s10 ha-left va-top">{{ rep.user.name }} ({{ rep.user.email }})
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Descrição</div>
+                        <div class="col s10 ha-left va-top">{{ rep.description if rep.description and rep.description|length > 0 else 'Sem descriçao' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Localização</div>
+                        <div class="col s10 ha-left va-top">{{ rep.gps_location.lat }}, {{ rep.gps_location.lng }}
+                            <a title="Local da participação"
+                               href="https://www.google.com/maps/@{{ rep.gps_location.lat }},{{ rep.gps_location.lng }},20z"
+                               target="_blank"><i class="material-icons">location_on</i></a></div>
+                    </div>
+                    {% if rep.images > 0 %}
+                        <div class="row">
+                            <div class="col s2 ha-left va-top">Imagens</div>
+                            <div class="col s10 ha-left va-top">{{ rep.images|length }} submetidas</div>
+                        </div>
+                        <div class="rep_images">
+                            {% for img in rep.images -%}
+                                <div class="rep_image"
+                                     style="background-image: url('/static/{{ img }}');">
+                                    <a href="/static/{{ img }}"
+                                       data-lightbox="{{ rep.id }}-set" data-title=""></a>
+                                </div>
+                            {%- endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="table reports" id="active_reports">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Em Análise</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option reports" data-action="delete"
+                       title="Apagar participações selecionadas">delete</i><i
+                        class="material-icons general_option reports" data-action="done"
+                        title="Passar para 'Resolvidas'">done_all</i><i
+                        class="material-icons general_option reports" data-action="special"
+                        title="Passar para 'Casos Especiais'">folder_special</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="active_reports_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="active_reports_toggle_check" data-table="active_reports"
+                           class="general_toggle">
+                </div>
+                <div class="col s3 ha-left va-mid">Submetida por</div>
+                <div class="col s4 ha-left va-mid">Categoria</div>
+                <div class="col s2 ha-left va-mid">Data de submissão</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for rep in active_reports %}
+                <div class="row report" report-id="{{ rep.id }}" data-rtype="{{ rep.category.id }}"
+                     data-prtype="{{ rep.category.parent_category.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_report_{{ rep.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_report_{{ rep.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ rep.user.name }}</div>
+                    <div class="col s4 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ rep.humanized_date }}</div>
+                    <div class="col s3 ha-mid va-mid">
+                        <i class="material-icons report_option" data-action="info"
+                           title="Ver detalhes">info</i>
+                        <i class="material-icons report_option" data-action="delete"
+                           title="Apagar participação">delete</i><i
+                            class="material-icons report_option" data-action="done"
+                            title="Passar para 'Resolvidas'">done</i><i
+                            class="material-icons report_option" data-action="special"
+                            title="Passar para 'Casos Especiais'">folder_special</i>
+                    </div>
+                </div>
+                <div class="report_info" for="{{ rep.id }}">
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Categoria</div>
+                        <div class="col s7 ha-left va-mid">{{ rep.category.parent_category.name.pt }}</div>
+                        <div class="col s3 ha-right va-mid">
+                            <span>Submetida</span><span>{{ rep.humanized_date }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Sub-categoria</div>
+                        <div class="col s10 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Submetida por</div>
+                        <div class="col s10 ha-left va-top">{{ rep.user.name }} ({{ rep.user.email }})
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Descrição</div>
+                        <div class="col s10 ha-left va-top">{{ rep.description if rep.description and rep.description|length > 0 else 'Sem descriçao' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Localização</div>
+                        <div class="col s10 ha-left va-top">{{ rep.gps_location.lat }}, {{ rep.gps_location.lng }}
+                            <a title="Local da participação"
+                               href="https://www.google.com/maps/@{{ rep.gps_location.lat }},{{ rep.gps_location.lng }},20z"
+                               target="_blank"><i class="material-icons">location_on</i></a></div>
+                    </div>
+                    {% if rep.images > 0 %}
+                        <div class="row">
+                            <div class="col s2 ha-left va-top">Imagens</div>
+                            <div class="col s10 ha-left va-top">{{ rep.images }} submetidas</div>
+                        </div>
+                        <div class="rep_images">
+                            {% for img in rep.images -%}
+                                <div class="rep_image"
+                                     style="background-image: url('/static/{{ img }}');">
+                                    <a href="/static/{{ img }}"
+                                       data-lightbox="{{ rep.id }}-set" data-title=""></a>
+                                </div>
+                            {%- endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="table reports" id="solved_reports">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Resolvidas</div>
+                <div class="col s6 ha-right va-mid noselect"></div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid"></div>
+                <div class="col s3 ha-left va-mid">Submetida por</div>
+                <div class="col s4 ha-left va-mid">Categoria</div>
+                <div class="col s2 ha-left va-mid">Data de submissão</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for rep in solved_reports %}
+                <div class="row report" report-id="{{ rep.id }}" data-rtype="{{ rep.category.id }}"
+                     data-prtype="{{ rep.category.parent_category.id }}">
+                    <div class="col s1 ha-mid va-mid noselect"></div>
+                    <div class="col s3 ha-left va-mid">{{ rep.user.name }}</div>
+                    <div class="col s4 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ rep.humanized_date }}</div>
+                    <div class="col s3 ha-mid va-mid">
+                        <i class="material-icons report_option" data-action="info"
+                           title="Ver detalhes">info</i>
+                    </div>
+                </div>
+                <div class="report_info" for="{{ rep.id }}">
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Categoria</div>
+                        <div class="col s7 ha-left va-mid">{{ rep.category.parent_category.name.pt }}</div>
+                        <div class="col s3 ha-right va-mid">
+                            <span>Submetida</span><span>{{ rep.humanized_date }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Sub-categoria</div>
+                        <div class="col s10 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Submetida por</div>
+                        <div class="col s10 ha-left va-top">{{ rep.user.name }} ({{ rep.user.email }})
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Descrição</div>
+                        <div class="col s10 ha-left va-top">{{ rep.description if rep.description and rep.description|length > 0 else 'Sem descriçao' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Localização</div>
+                        <div class="col s10 ha-left va-top">{{ rep.gps_location.lat }}, {{ rep.gps_location.lng }}
+                            <a title="Local da participação"
+                               href="https://www.google.com/maps/@{{ rep.gps_location.lat }},{{ rep.gps_location.lng }},20z"
+                               target="_blank"><i class="material-icons">location_on</i></a></div>
+                    </div>
+                    {% if rep.images > 0 %}
+                        <div class="row">
+                            <div class="col s2 ha-left va-top">Imagens</div>
+                            <div class="col s10 ha-left va-top">{{ rep.images }} submetidas</div>
+                        </div>
+                        <div class="rep_images">
+                            {% for img in rep.images -%}
+                                <div class="rep_image"
+                                     style="background-image: url('/static/{{ img }}');">
+                                    <a href="/static/{{ img }}"
+                                       data-lightbox="{{ rep.id }}-set" data-title=""></a>
+                                </div>
+                            {%- endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="table reports" id="special_cases_reports">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Casos Especiais</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option reports" data-action="done"
+                       title="Passar para 'Resolvidas'">done_all</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="special_reports_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="special_reports_toggle_check"
+                           data-table="special_cases_reports" class="general_toggle">
+                </div>
+                <div class="col s3 ha-left va-mid">Submetida por</div>
+                <div class="col s4 ha-left va-mid">Categoria</div>
+                <div class="col s2 ha-left va-mid">Data de submissão</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for rep in special_case_reports %}
+                <div class="row report" report-id="{{ rep.id }}" data-rtype="{{ rep.category.id }}"
+                     data-prtype="{{ rep.category.parent_category.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_report_{{ rep.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_report_{{ rep.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ rep.user.name }}</div>
+                    <div class="col s4 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ rep.humanized_date }}</div>
+                    <div class="col s3 ha-mid va-mid">
+                        <i class="material-icons report_option" data-action="info"
+                           title="Ver detalhes">info</i>
+                        <i class="material-icons report_option" data-action="done"
+                           title="Passar para 'Resolvidas'">done</i>
+                    </div>
+                </div>
+                <div class="report_info" for="{{ rep.id }}">
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Categoria</div>
+                        <div class="col s7 ha-left va-mid">{{ rep.category.parent_category.name.pt }}</div>
+                        <div class="col s3 ha-right va-mid">
+                            <span>Submetida</span><span>{{ rep.humanized_date }}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-mid">Sub-categoria</div>
+                        <div class="col s10 ha-left va-mid">{{ rep.category.name.pt }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Submetida por</div>
+                        <div class="col s10 ha-left va-top">{{ rep.user.name }} ({{ rep.user.email }})
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Descrição</div>
+                        <div class="col s10 ha-left va-top">{{ rep.description if rep.description and rep.description|length > 0 else 'Sem descriçao' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col s2 ha-left va-top">Localização</div>
+                        <div class="col s10 ha-left va-top">{{ rep.gps_location.lat }}, {{ rep.gps_location.lng }}
+                            <a title="Local da participação"
+                               href="https://www.google.com/maps/@{{ rep.gps_location.lat }},{{ rep.gps_location.lng }},20z"
+                               target="_blank"><i class="material-icons">location_on</i></a></div>
+                    </div>
+                    {% if rep.images > 0 %}
+                        <div class="row">
+                            <div class="col s2 ha-left va-top">Imagens</div>
+                            <div class="col s10 ha-left va-top">{{ rep.images|length }} submetidas</div>
+                        </div>
+                        <div class="rep_images">
+                            {% for img in rep.images -%}
+                                <div class="rep_image"
+                                     style="background-image: url('/static/{{ img }}');">
+                                    <a href="/static/{{ img }}"
+                                       data-lightbox="{{ rep.id }}-set" data-title=""></a>
+                                </div>
+                            {%- endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

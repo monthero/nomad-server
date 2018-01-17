@@ -1,0 +1,26 @@
+{%  set state = report.state|report_state_translator %}
+
+<div class="header row">
+    <div class="col s2 ha-left va-mid" id="report_page_back"><i class="material-icons">arrow_back</i></div>
+    <div class="col s10 ha-right va-mid" id="report_state"><span>{{ state[1] }}</span><i class="material-icons">{{ state[0] }}</i></div>
+</div>
+<div class="body">
+    <div class="title">Categoria</div>
+    <section class="category">
+        <span>{{ report.category.parent_category.name.pt }}</span><span>{{ report.category.name.pt }}</span>
+    </section>
+    <div class="title">Data da participação</div>
+    <section class="date">{{ report.submitted_at }}, {{ report.humanized_date }}</section>
+    <div class="title">Descrição</div>
+    <section class="description">{{ report.description }}</section>
+    <div class="title">Local</div>
+    <section id="street_view" data-latitude="{{ report.gps_location.lat }}" data-longitude="{{ report.gps_location.lng }}"></section>
+    {% if report.images|length > 0 %}
+        <div class="title">{{ report.images|length }} {{ "Imagem submetida" if report.images|length == 1 else "Imagens submetidas" }}</div>
+        <section class="images">
+        {% for path in report.images -%}
+        <div class="report_image" style="background-image: url('{{ address }}/static/{{ path }}');"></div>
+        {%- endfor %}
+        </section>
+    {% endif %}
+</div>

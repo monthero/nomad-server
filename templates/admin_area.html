@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Lato:300,400,700|Megrim|Wire+One&amp;subset=latin-ext"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/vex/css/vex.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/vex/css/vex-theme-default.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/lightbox/css/lightbox.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/datetimepicker/jquery.datetimepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+{% if not current_user.id %}
+    <div class="row">
+        <div class="col s5 ha-mid va-mid"><input type="text" name="credential" id="login_credential"
+                                                 placeholder="Username ou Email" value="monty"></div>
+        <div class="col s5 ha-mid va-mid"><input type="password" name="password" id="login_password"
+                                                 placeholder="Password" value="123123"></div>
+        <div class="col s2 ha-mid va-mid">
+            <button id="login_button" type="button">Login</button>
+        </div>
+    </div>
+{% else %}
+    {% if current_user.is_admin and not current_user.is_blocked %}
+        <nav role="navigation">
+            <div id="logo">
+                <h1><span>Local</span><span>Nomad</span></h1>
+                <h3>Guimarães</h3>
+            </div>
+            <ul id="nav_menu">
+                <li class="nav_item {% block active1 %}{% endblock %}" data-link="/administracao/utilizadores"><i class="material-icons">face</i>Utilizadores</li>
+                <li class="nav_item {% block active2 %}{% endblock %}" data-link="/administracao/participacoes"><i class="material-icons">report_problem</i>Participações</li>
+                <li class="nav_item {% block active3 %}{% endblock %}" data-link="/administracao/eventos"><i class="material-icons">event_note</i>Eventos</li>
+                <li class="nav_item {% block active4 %}{% endblock %}" data-link="/administracao/parceiros"><i class="material-icons">people</i>Parceiros</li>
+                <li class="nav_item {% block active5 %}{% endblock %}" data-link="/administracao/loja"><i class="material-icons">shopping_cart</i>Loja</li>
+                <li class="nav_item {% block active6 %}{% endblock %}" data-link="/administracao/templos"><i class="material-icons">location_on</i>Locais</li>
+            </ul>
+        </nav>
+        <div id="main_content">
+            <div class="header row">
+                <div class="col s6 va-mid ha-left"><span>Área de Administração</span><i class="material-icons">chevron_right</i><span
+                        id="admin_title">{% block admin_title %}{% endblock %}</span></div>
+                <div class="col s6 va-mid ha-right">{{ current_user.username }}</div>
+            </div>
+            <div class="body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcQ1ylvv64YsHAxwej91fnayMJdsp-tGA"></script>
+<script src="{{ url_for('static', filename='js/vex/js/vex.combined.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lightbox/js/lightbox.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

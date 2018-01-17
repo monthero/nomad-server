@@ -1,0 +1,129 @@
+{% extends "admin_area.html" %}
+
+{% block title %}Local Nomad{% endblock %}
+
+{% block styles %}{% endblock %}
+{% block admin_title %}Loja{% endblock %}
+{% block active5 %}active{% endblock %}
+{% block content %}
+    <section class="shop">
+        <div class="row nav">
+            <div class="col s4 ha-left va-mid">Loja
+                <i class="material-icons add_new" id="add_new_shop_item" title="Adicionar novo produto à loja">add_shopping_cart</i>
+            </div>
+            <div class="col s8 ha-right va-mid">
+                <button class="table_toggle pressed" data-value="active_shop_items">Activos</button>
+                <button class="table_toggle pressed" data-value="inactive_shop_items">Inactivos</button>
+            </div>
+        </div>
+        <div class="table shop_items" id="active_shop_items">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Produtos activos</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option shop_items" data-action="hide"
+                       title="Desactivar produtos selecionados">visibility_off</i>
+                    <i class="material-icons general_option shop_items" data-action="delete"
+                       title="Apagar produtos selecionados">delete</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="active_shop_items_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="active_shop_items_toggle_check" class="general_toggle"
+                           data-table="active_shop_items">
+                </div>
+                <div class="col s3 ha-left va-mid">Nome</div>
+                <div class="col s2 ha-left va-mid">Parceiro</div>
+                <div class="col s2 ha-left va-mid">Valor</div>
+                <div class="col s2 ha-left va-mid">Limite</div>
+                <div class="col s2 ha-mid va-mid"></div>
+            </div>
+            {% for si in active_shop_items %}
+                <div class="row shop_item" shop-item-id="{{ si.id }}" data-partner-id="{{ si.partner.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_shop_item_{{ si.id }}"><i class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_shop_item_{{ si.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ si.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ si.partner.name }}</div>
+                    <div class="col s2 ha-left va-mid">{{ si.cost }}</div>
+                    <div class="col s2 ha-left va-mid">
+                        {% if si.limit %}
+                            {% if si.limit.duration == 'month' %}
+                                {{ si.limit.quantity }} por mês
+                            {% elif si.limit.duration == 'week' %}
+                                {{ si.limit.quantity }} por semana
+                            {% elif si.limit.duration == 'day' %}
+                                {{ si.limit.quantity }} por dia
+                            {% endif %}
+                        {% else %}
+                            Nenhum
+                        {% endif %}
+                    </div>
+                    <div class="col s2 ha-mid va-mid">
+                        <i class="material-icons shop_item_option" data-action="info">info</i><i
+                            class="material-icons shop_item_option" data-action="delete">delete</i><i
+                            class="material-icons shop_item_option" data-action="hide">visibility_off</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="table shop_items" id="inactive_shop_items">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Produtos inactivos</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option shop_items" data-action="show"
+                       title="Activar produtos selecionados">visibility</i>
+                    <i class="material-icons general_option shop_items" data-action="delete"
+                       title="Apagar produtos selecionados">delete</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="active_shop_items_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="active_shop_items_toggle_check" class="general_toggle"
+                           data-table="active_shop_items">
+                </div>
+                <div class="col s3 ha-left va-mid">Nome</div>
+                <div class="col s2 ha-left va-mid">Parceiro</div>
+                <div class="col s2 ha-left va-mid">Valor</div>
+                <div class="col s2 ha-left va-mid">Limite</div>
+                <div class="col s2 ha-mid va-mid"></div>
+            </div>
+            {% for si in inactive_shop_items %}
+                <div class="row shop_item" shop-item-id="{{ si.id }}" data-partner-id="{{ si.partner.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_shop_item_{{ si.id }}"><i class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_shop_item_{{ si.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ si.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ si.partner.name }}</div>
+                    <div class="col s2 ha-left va-mid">{{ si.cost }}</div>
+                    <div class="col s2 ha-left va-mid">
+                        {% if si.limit %}
+                            {% if si.limit.duration == 'month' %}
+                                {{ si.limit.quantity }} por mês
+                            {% elif si.limit.duration == 'week' %}
+                                {{ si.limit.quantity }} por semana
+                            {% elif si.limit.duration == 'day' %}
+                                {{ si.limit.quantity }} por dia
+                            {% endif %}
+                        {% else %}
+                            Nenhum
+                        {% endif %}
+                    </div>
+                    <div class="col s2 ha-mid va-mid">
+                        <i class="material-icons shop_item_option" data-action="info">info</i><i
+                            class="material-icons shop_item_option" data-action="delete">delete</i><i
+                            class="material-icons shop_item_option" data-action="show">visibility</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt_PT">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Lato:300,400,700|Megrim|Wire+One&amp;subset=latin-ext"
+          rel="stylesheet">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!--suppress ALL -->
+<div id="view_modal" data-tribe="{{ bio.tribe }}" class="profile" data-user-id="{{ user.id }}">
+    <div class="header row" data-type="profile">
+        <div class="col s10 ha-left va-mid" id="profile_header_options" data-user-id="{{ user.id }}">
+            {% if is_linked %}
+                <div class="profile_navigation_option" data-value="back"
+                     style="background-image: url('img/icons/arrow_back.png');"></div>{% endif %}
+            {% if user.id == current_user.id %}
+                <div class="profile_navigation_option" data-value="message_box"
+                     style="background-image: url('img/icons/envelope.png');">
+                    {% if messages.received.unread > 0 %}
+                        <div class="count">'+messages.received.unread+'</div>{% endif %}
+                </div>
+                <div class="profile_navigation_option" data-value="edit_profile"
+                     style="background-image: url('img/icons/edit_profile.png');"></div>
+            {% else %}
+                <div class="profile_navigation_option" data-value="send_message"
+                     style="background-image: url('img/icons/send_message.png');"></div>
+                {% if friend_status.state == 0 %}
+                    <div class="profile_navigation_option" data-value="add_friend"
+                         style="background-image: url('img/icons/add_friend.png');"></div>
+                {% elif friend_status.state == 1 %}
+                    <div class="profile_navigation_option" data-value="accept_friend"
+                         style="background-image: url('img/icons/accept_friend.png');"></div>
+                    <div class="profile_navigation_option" data-value="reject_friend"
+                         style="background-image: url('img/icons/reject_friend.png');"></div>
+                {% elif friend_status.state == 2 %}
+                    <div class="profile_navigation_option" data-value="cancel_invite"
+                         style="background-image: url('img/icons/reject_friend.png');"></div>
+                {% else %}
+                    <div class="profile_navigation_option" data-value="remove_friend"
+                         style="background-image: url('img/icons/remove_friend.png');"></div>
+
+                {% endif %}
+            {% endif %}
+            <div class="profile_navigation_option" data-value="find_user"
+                 style="background-image: url('img/icons/find_user.png');"></div>
+        </div>
+        <div class="col s2 ha-right va-mid" id="close_view">
+            <div class="profile_navigation_option" data-value="close"
+                 style="background-image: url('img/icons/close.png');"></div>
+        </div>
+        <div id="search_box" class="block">
+            <div class="input_container block"><input type="text" id="user_search" placeholder="Pesquisar"></div>
+            <div class="search_user_list block">
+                {% for u in search_users %}
+                    <div class="row user" data-user-id="{{ u.id }}" data-tribe="{{ u.tribe }}">
+                        <div class="col s3 ha-mid va-mid"><div class="avatar" style="background-image: url('{{ address }}/static/user_images/{{ u.id }}/0.jpg');"><img src="img/icons/{{ u.tribe }}-tribe.png"></div></div>
+                        <div class="col s7 ha-left va-mid">{{ u.name }}</div>
+                        <div class="col s2 ha-left va-mid"><i class="material-icons">person</i></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div id="profile_bio" class="{{ "compact" if user.id != current_user.id else "" }}">
+        <div>
+            <div id="photo"
+                 style="background-image: url('{{ address }}/static/user_images/{{ user.id }}/0.jpg');"></div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col s12 ha-mid va-mid">
+                    <img src="img/icons/{{ bio.tribe }}-tribe.png" class="tribe"><span
+                        class="username">{{ bio.name }}</span><span
+                        class="level">nível {{ bio.level }}</span>
+                </div>
+            </div>
+        </div>
+        {% if user.id == current_user.id %}
+            {% set pc_text = [(to_next_level.total_to_next_level - to_next_level.points_left), "/", to_next_level.total_to_next_level] %}
+            <div id="profile_xp_bar">
+                <div class="fill" style="width: {{ to_next_level.percentage }}%;"></div>
+                <span>{{ pc_text|join }} ({{ to_next_level.percentage }}%)</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="view_nav row" data-type="profile">
+        {% if user.id == current_user.id %}
+            <div class="col s3 ha-mid va-mid selected" data-type="nav-button"><img src="img/icons/inventory.png"><span>inventário</span>
+            </div>
+            <div class="col s3 ha-mid va-mid" data-type="nav-button"><img
+                    src="img/icons/activity.png"><span>atividade</span></div>
+            <div class="col s3 ha-mid va-mid" data-type="nav-button"><img
+                    src="img/icons/stats.png"><span>estatísticas</span></div>
+            <div class="col s3 ha-mid va-mid" data-type="nav-button"><img
+                    src="img/icons/friends.png"><span>amigos</span></div>
+        {% else %}
+            <div class="col s4 ha-mid va-mid selected" data-type="nav-button"><img src="img/icons/activity.png"><span>atividade</span>
+            </div>
+            <div class="col s4 ha-mid va-mid" data-type="nav-button"><img
+                    src="img/icons/stats.png"><span>estatísticas</span></div>
+            <div class="col s4 ha-mid va-mid" data-type="nav-button"><img
+                    src="img/icons/friends.png"><span>amigos</span></div>
+        {% endif %}
+    </div>
+
+    <div class="body">
+        {% if user.id == current_user.id %}
+            <!-- INVENTORY TAB -->
+            <div class="tab show" data-type="inventory" style="left: 0;">
+                <div class="row">
+                    <div class="col s6 ha-left va-mid" data-elem="nomad">
+                        <img src="img/icons/nomads.png" alt=""><span>{{ user.inventory.points.current }}</span>
+                    </div>
+                    <div class="col s6 ha-right va-mid" data-elem="wind">
+                        <span>{{ user.inventory.essences.wind.current }}</span><img src="img/icons/wind.png" alt="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6 ha-left va-mid" data-elem="water">
+                        <img src="img/icons/water.png" alt=""><span>{{ user.inventory.essences.water.current }}</span>
+                    </div>
+                    <div class="col s6 ha-right va-mid" data-elem="fire">
+                        <span>{{ user.inventory.essences.fire.current }}</span><img src="img/icons/fire.png" alt="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6 ha-left va-mid" data-elem="spirit">
+                        <img src="img/icons/spirit.png" alt=""><span>{{ user.inventory.essences.spirit.current }}</span>
+                    </div>
+                    <div class="col s6 ha-right va-mid" data-elem="earth">
+                        <span>{{ user.inventory.essences.earth.current }}</span><img src="img/icons/earth.png" alt="">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <!-- ACTIVITY TAB -->
+        <div class="tab{{ "" if user.id == current_user.id else " show" }}" data-type="activity"
+             style="left: {{ "100%" if user.id == current_user.id else "0" }};">
+            {% for a in stats.activity_log -%}
+                <div class="row" data-action="{{ a.action }}">
+                    <div class="col s1 ha-right va-mid"><img src="img/icons/{{ a.action }}.png"></div>
+                    {% if a.action == "visit" %}
+                        <div class="col s8 ha-left va-mid">Visitou {{ a.temple.name }}</div>
+                    {% elif a.action == "collect" %}
+                        <div class="col s8 ha-left va-mid">Fez uma recolha no templo {{ a.temple.name }}</div>
+                    {% elif a.action == "tribute" %}
+                        <div class="col s8 ha-left va-mid">Ofereceu um tributo no templo {{ a.temple.name }}</div>
+                    {% elif a.action == "report" %}
+                        <div class="col s8 ha-left va-mid">Submeteu uma
+                            participação{{ "" if not a.near else " perto do templo " + a.near.name }}</div>
+                    {% endif %}
+                    <div class="col s3 ha-mid va-mid">{{ a.date|humanize_date }}</div>
+                </div>
+            {%- endfor %}
+        </div>
+        <!-- STATISTICS TAB -->
+        <div class="tab" data-type="stats" style="left: {{ "200%" if user.id == current_user.id else "100%" }};">
+            {% if user.id == current_user.id %}
+                <div class="area block" data-title="materials">
+                    <div class="title block">materiais</div>
+                    {% set elems = ["nomads", "fire", "wind", "water", "spirit", "earth"] %}
+                    {% for e in elems -%}
+                        <div class="ib s6 va-top ha-left">
+                            <img src="img/icons/{{ e }}.png">
+                            <div>
+                                <span>recebido</span><span>{{ user.inventory.essences[e].total if e != "nomads" else user.inventory.points.total }}</span>
+                            </div>
+                            <div>
+                                <span>gasto</span><span>{{ user.inventory.essences[e].total - user.inventory.essences[e].current  if e != "nomads" else user.inventory.points.total - user.inventory.points.current }}</span>
+                            </div>
+                        </div>
+                    {%- endfor %}
+
+                </div>
+            {% endif %}
+            <!-- ACTION STATS -->
+            <div class="area ib va-top s6" data-title="actions">
+                <div class="title block">ações</div>
+                <div class="row">
+                    <div class="col s8 ha-left va-mid">visitas</div>
+                    <div class="col s4 ha-right va-mid">{{ stats.actions.visits }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s8 ha-left va-mid">trocas</div>
+                    <div class="col s4 ha-right va-mid">{{ stats.actions.exchanges }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s8 ha-left va-mid">recolhas</div>
+                    <div class="col s4 ha-right va-mid">{{ stats.actions.collects }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s8 ha-left va-mid">tributos</div>
+                    <div class="col s4 ha-right va-mid">{{ stats.actions.tributes }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s8 ha-left va-mid">participações</div>
+                    <div class="col s4 ha-right va-mid">{{ stats.actions.reports }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s8 ha-left va-mid">total</div>
+                    <div class="col s4 ha-right va-mid">{{ stats.actions.total }}</div>
+                </div>
+            </div><div class="area ib va-top s6" data-title="distance">
+                <div class="title block">distância percorrida</div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">hoje</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.meters_traveled.today }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">esta semana</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.meters_traveled.this_week }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">este mês</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.meters_traveled.this_month }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">este ano</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.meters_traveled.this_year }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">total</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.meters_traveled.total }}</div>
+                </div>
+            </div>
+            <!-- REPORTS STATS -->
+            <div class="area ib va-top s6" data-title="reports">
+                <div class="title block">Participações</div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">hoje</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.reports_sent.waiting }}</div>
+                </div>
+            </div><div class="area ib va-top s6" data-title="achievements">
+                <div class="title block">conquistas</div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">concluídas</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.achievements.completed }}</div>
+                </div>
+                <div class="row">
+                    <div class="col s7 ha-left va-mid">coletadas</div>
+                    <div class="col s5 ha-right va-mid">{{ stats.achievements.collected }}</div>
+                </div>
+            </div>
+            <!-- TEMPLES STATS -->
+            <div class="area block" data-title="temples">
+                <div class="title block">Templos</div>
+                <div class="row">
+                    <div class="col s6 ha-left va-mid">
+                        <div class="row">
+                            <div class="col s7 ha-left va-mid">encontrados</div>
+                            <div class="col s5 ha-right va-mid">{{ stats.discovered_temples.found }}
+                                / {{ stats.discovered_temples.total }}</div>
+                        </div>
+                    </div>
+                    <div class="col s6 ha-right va-mid"></div>
+                </div>
+                <div class="title block">Visitas por categoria</div>
+                <div class="block">
+                    {% for stv in stats.spot_type_visits -%}
+                        <div class="ib va-top s6">
+                            <div class="row">
+                                <div class="col s10 va-mid ha-left">
+                                    <div class="row">
+                                        <div class="col s3 ha-left va-mid"><img
+                                                src="img/icons/spot_type_icons/{{ stv.icon }}.png" alt=""></div>
+                                        <div class="col s9 ha-left va-mid">{{ stv.name_pt }}</div>
+                                    </div>
+                                </div>
+                                <div class="col s2 va-mid ha-right">{{ stv.count }}</div>
+                            </div>
+                        </div>
+                    {%- endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- FRIEND LIST TAB -->
+        <div class="tab" data-type="friends" style="left: {{ "300%" if user.id == current_user.id else "200%" }};">
+            {% if user.id == current_user.id %}
+                <div class="title">Pedidos Enviados</div>
+                <div class="friends_div" data-type="pending_sent">
+                    {% for fr in friend_list.pending_sent -%}
+                        <div class="row" data-user-id="{{ fr.id }}">
+                            <div class="col s8 ha-left va-mid">
+                                <div class="avatar"
+                                     style="background-image: url('{{ address }}/static/user_images/{{ fr.id }}/0.jpg');">
+                                    <img src="img/icons/{{ fr.tribe }}-tribe.png" alt="">
+                                </div>
+                                <div class="info">
+                                    <span class="username">{{ fr.name }}</span><span
+                                        class="date">enviado {{ fr.date }}</span>
+                                </div>
+                            </div>
+                            <div class="col s4 ha-right va-mid" data-id="{{ fr.req_id }}">
+                                <div class="fr_action">
+                                    <i class="material-icons" data-action="cancel">close</i><span>cancelar</span>
+                                </div>
+                                <div class="fr_action" data-user-id="{{ fr.id }}">
+                                    <i class="material-icons" data-action="visit">person</i><span>ver perfil</span>
+                                </div>
+                            </div>
+                        </div>
+                    {%- endfor %}
+                </div>
+                <div class="title">à espera de resposta</div>
+                <div class="friends_div" data-type="pending_received">
+                    {% for fr in friend_list.pending_received -%}
+                        <div class="row" data-user-id="{{ fr.id }}">
+                            <div class="col s8 ha-left va-mid">
+                                <div class="avatar"
+                                     style="background-image: url('{{ address }}/static/user_images/{{ fr.id }}/0.jpg');">
+                                    <img src="img/icons/{{ fr.tribe }}-tribe.png" alt="">
+                                </div>
+                                <div class="info">
+                                    <span class="username">{{ fr.name }}</span><span
+                                        class="date">enviado {{ fr.date }}</span>
+                                </div>
+                            </div>
+                            <div class="col s4 ha-right va-mid" data-id="{{ fr.req_id }}">
+                                <div class="fr_action">
+                                    <i class="material-icons" data-action="accept">done</i><span>aceitar</span>
+                                </div>
+                                <div class="fr_action">
+                                    <i class="material-icons"
+                                       data-action="reject">not_interested</i><span>rejeitar</span>
+                                </div>
+                                <div class="fr_action" data-user-id="{{ fr.id }}">
+                                    <i class="material-icons" data-action="visit">person</i><span>ver perfil</span>
+                                </div>
+                            </div>
+                        </div>
+                    {%- endfor %}
+                </div>
+            {% else %}
+                <div class="title">Amigos em comum</div>
+                <div class="friends_div" data-type="friends_in_common">
+                    {% for fr in friend_status.friends_in_common -%}
+                        <div class="row" data-user-id="{{ fr.id }}">
+                            <div class="col s8 ha-left va-mid">
+                                <div class="avatar"
+                                     style="background-image: url('{{ address }}/static/user_images/{{ fr.id }}/0.jpg');">
+                                    <img src="img/icons/{{ fr.tribe }}-tribe.png" alt="">
+                                </div>
+                                <div class="info">
+                                    <span class="username">{{ fr.name }}</span>
+                                </div>
+                            </div>
+                            <div class="col s4 ha-right va-mid">
+                                <div class="fr_action" data-user-id="{{ fr.id }}">
+                                    <i class="material-icons" data-action="visit">person</i><span>ver perfil</span>
+                                </div>
+                            </div>
+                        </div>
+                    {%- endfor %}
+                </div>
+            {% endif %}
+            <div class="title">Amigos</div>
+            <div class="friends_div" data-type="friends">
+                {% for fr in friend_list.friends -%}
+                    <div class="row" data-user-id="{{ fr.id }}">
+                        <div class="col s8 ha-left va-mid">
+                            <div class="avatar"
+                                 style="background-image: url('{{ address }}/static/user_images/{{ fr.id }}/0.jpg');">
+                                <img src="img/icons/{{ fr.tribe }}-tribe.png" alt="">
+                            </div>
+                            <div class="info">
+                                <span class="username">{{ fr.name }}</span>{% if user.id == current_user.id %}
+                                <span class="date">amigo {{ fr.date }}</span>{% endif %}
+
+                            </div>
+                        </div>
+                        <div class="col s4 ha-right va-mid" {{ 'data-id="'+ fr.req_id|string +'"' if user.id == current_user.id else "" }}>
+                            {% if user.id == current_user.id %}
+                                <div class="fr_action"><i class="material-icons" data-action="remove">remove_circle_outline</i><span>remover</span>
+                                </div>
+                            {% endif %}
+                            <div class="fr_action" data-user-id="{{ fr.id }}">
+                                <i class="material-icons" data-action="visit">person</i><span>ver perfil</span>
+                            </div>
+                        </div>
+                    </div>
+                {%- endfor %}
+            </div>
+        </div>
+    </div>
+</div>

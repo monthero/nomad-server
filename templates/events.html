@@ -1,0 +1,152 @@
+{% extends "admin_area.html" %}
+
+{% block title %}Local Nomad{% endblock %}
+
+{% block styles %}{% endblock %}
+{% block admin_title %}Eventos{% endblock %}
+{% block active3 %}active{% endblock %}
+{% block content %}
+    <section class="events">
+        <div class="row nav">
+            <div class="col s4 ha-left va-mid">Eventos <i class="material-icons add_new"
+                                                          id="add_new_event"
+                                                          title="Agendar Novo Evento">event</i>
+                <i class="material-icons add_new"
+                   id="manage_missions"
+                   title="Gerir Missões de Eventos">format_list_bulleted</i>
+            </div>
+            <div class="col s8 ha-right va-mid">
+                <button class="table_toggle pressed" data-value="not_started_events">Agendados</button>
+                <button class="table_toggle pressed" data-value="ongoing_events">A Decorrer</button>
+                <button class="table_toggle" data-value="finished_events">Terminados</button>
+            </div>
+        </div>
+        <div id="not_started_events" class="table events">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Agendados</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option events" data-action="delete"
+                       title="Apagar eventos selecionados">delete</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="not_started_events_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="not_started_events_toggle_check" class="general_toggle"
+                           data-table="finished_events">
+                </div>
+                <div class="col s3 ha-left va-mid">Nome</div>
+                <div class="col s2 ha-left va-mid">Início</div>
+                <div class="col s2 ha-left va-mid">Fim</div>
+                <div class="col s2 ha-left va-mid">Local</div>
+                <div class="col s2 ha-mid va-mid"></div>
+            </div>
+            {% for event in not_started_events %}
+                <div class="row event" data-event-id="{{ event.id }}">
+                    <div class="col s1 ha-mid va-mid">
+                        <label for="toggle_check_event_{{ event.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_event_{{ event.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ event.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.starts_at|event_dt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.ends_at|event_dt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.location.lat }}, {{ event.location.lng }}</div>
+                    <div class="col s2 ha-mid va-mid">
+                        <i class="material-icons event_option" data-action="info"
+                           title="Abrir/Fechar janela de informações do evento">info</i>
+                        <i class="material-icons event_option" data-action="edit"
+                           title="Editar informação do evento">edit</i>
+                        <i class="material-icons event_option" data-action="delete"
+                           title="Apagar evento">delete</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="ongoing_events" class="table events">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">A Decorrer</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option events" data-action="delete"
+                       title="Apagar eventos selecionados">delete</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="ongoing_events_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="ongoing_events_toggle_check" class="general_toggle"
+                           data-table="finished_events">
+                </div>
+                <div class="col s3 ha-left va-mid">Nome</div>
+                <div class="col s2 ha-left va-mid">Início</div>
+                <div class="col s2 ha-left va-mid">Fim</div>
+                <div class="col s2 ha-left va-mid">Local</div>
+                <div class="col s2 ha-mid va-mid"></div>
+            </div>
+            {% for event in ongoing_events %}
+                <div class="row event" data-event-id="{{ event.id }}">
+                    <div class="col s1 ha-mid va-mid">
+                        <label for="toggle_check_event_{{ event.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_event_{{ event.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ event.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.starts_at|event_dt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.ends_at|event_dt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.location.lat }}, {{ event.location.lng }}</div>
+                    <div class="col s2 ha-mid va-mid">
+                        <i class="material-icons event_option" data-action="info"
+                           title="Abrir/Fechar janela de informações do evento">info</i>
+                        <i class="material-icons event_option" data-action="delete"
+                           title="Apagar evento">delete</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="finished_events" class="table events" style="display:none;">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Terminados</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option events" data-action="delete"
+                       title="Apagar eventos selecionados">delete</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="finished_events_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="finished_events_toggle_check" class="general_toggle"
+                           data-table="finished_events">
+                </div>
+                <div class="col s3 ha-left va-mid">Nome</div>
+                <div class="col s2 ha-left va-mid">Início</div>
+                <div class="col s2 ha-left va-mid">Fim</div>
+                <div class="col s2 ha-left va-mid">Local</div>
+                <div class="col s2 ha-mid va-mid"></div>
+            </div>
+            {% for event in finished_events %}
+                <div class="row event" data-event-id="{{ event.id }}">
+                    <div class="col s1 ha-mid va-mid">
+                        <label for="toggle_check_event_{{ event.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_event_{{ event.id }}">
+                    </div>
+                    <div class="col s3 ha-left va-mid">{{ event.name.pt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.starts_at|event_dt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.ends_at|event_dt }}</div>
+                    <div class="col s2 ha-left va-mid">{{ event.location.lat }}, {{ event.location.lng }}</div>
+                    <div class="col s2 ha-mid va-mid">
+                        <i class="material-icons event_option" data-action="info"
+                           title="Abrir/Fechar janela de informações do evento">info</i>
+                        <i class="material-icons event_option" data-action="delete"
+                           title="Apagar evento">delete</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

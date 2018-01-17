@@ -1,0 +1,246 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+input,
+button,
+textarea,
+select {
+    outline: none;
+    font-family: 'Lato', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    text-shadow: none;
+}
+
+.material-icons {
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+.block {
+    display: block;
+    width: 100%;
+}
+
+.ib {
+    display: inline-block;
+}
+
+.row {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.col {
+    display: table-cell;
+}
+
+.va-top {
+    vertical-align: top;
+}
+
+.va-mid {
+    vertical-align: middle;
+}
+
+.va-bot {
+    vertical-align: bottom;
+}
+
+.ha-left {
+    text-align: left;
+}
+
+.ha-mid {
+    text-align: center;
+}
+
+.ha-right {
+    text-align: right;
+}
+
+.s1 {
+    width: 8.33%;
+}
+
+.s2 {
+    width: 16.67%;
+}
+
+.s3 {
+    width: 25%;
+}
+
+.s4 {
+    width: 33.33%;
+}
+
+.s5 {
+    width: 41.67%;
+}
+
+.s6 {
+    width: 50%;
+}
+
+.s7 {
+    width: 58.33%;
+}
+
+.s8 {
+    width: 66.67%;
+}
+
+.s9 {
+    width: 75%;
+}
+
+.s10 {
+    width: 83.33%;
+}
+
+.s11 {
+    width: 91.67%;
+}
+
+.s12 {
+    width: 100%;
+}
+
+button.btn {
+    border: none;
+    padding: 1vh;
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+button.btn.ha-left {
+    text-align: left;
+}
+
+button.btn.ha-mid {
+    text-align: center;
+}
+
+button.btn.ha-right {
+    text-align: right;
+}
+
+button.btn > .material-icons {
+    display: block;
+}
+
+button.btn > .material-icons.inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+button.btn > .material-icons.inline.left {
+    margin-right: 1vw;
+}
+
+button.btn > .material-icons.inline.right {
+    margin-left: 1vw;
+}
+
+button.btn.red {
+    background-color: #e74c3c;
+    color: #ecf0f1;
+}
+
+button.btn.blue {
+    background-color: #3498db;
+    color: #ecf0f1;
+}
+
+button.btn.green {
+    background-color: #2ecc71;
+    color: #ecf0f1;
+}
+
+button.btn.purple {
+    background-color: #9b59b6;
+    color: #ecf0f1;
+}
+
+button.btn.yellow {
+    background-color: #f39c12;
+    color: #ecf0f1;
+}
+
+button.btn.white {
+    background-color: #ecf0f1;
+    color: rgba(18, 18, 18, 0.7);
+}
+
+button.btn.float {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+button.btn.flat {
+    box-shadow: none;
+}
+
+button.btn.rounded {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

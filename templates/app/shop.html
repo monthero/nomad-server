@@ -1,0 +1,50 @@
+{% extends "app/view_modal.html" %}
+
+{% block header_type %}regular{% endblock %}
+{% block header_content %}
+    <div class="col s2 ha-mid va-mid"><i class="material-icons">shopping_cart</i></div>
+	<div class="col s8 ha-left va-mid">Loja</div>
+	<div class="col s2 ha-mid va-mid" id="close_view"><i class="material-icons">close</i></div>
+{% endblock %}
+{% block body_type %}shop{% endblock %}
+{% block body_content %}
+    <div class="tab show" id="shop_item_list">
+        <div class="row header">
+            <div class="col s8 ha-left va-mid" id="item_count">{{ items|length }} {{ 'item disponível' if items|length == 1 else 'items disponíveis' }}</div>
+            <div class="col s4 ha-right va-mid" id="shop_display_options">
+                <img src="img/icons/list.png" data-value="list"><img src="img/icons/grid.png" class="active" data-value="grid">
+            </div>
+        </div>
+        <div class="row" id="mat_count">
+            <div class="col s2 ha-mid va-mid" data-type="fires"><img src="img/icons/fire.png" alt=""><div class="value">{{ current_user.inventory.essences.fire.current }}</div></div>
+            <div class="col s2 ha-mid va-mid" data-type="waters"><img src="img/icons/water.png" alt=""><div class="value">{{ current_user.inventory.essences.water.current }}</div></div>
+            <div class="col s2 ha-mid va-mid" data-type="winds"><img src="img/icons/wind.png" alt=""><div class="value">{{ current_user.inventory.essences.wind.current }}</div></div>
+            <div class="col s2 ha-mid va-mid" data-type="earths"><img src="img/icons/earth.png" alt=""><div class="value">{{ current_user.inventory.essences.earth.current }}</div></div>
+            <div class="col s2 ha-mid va-mid" data-type="spirits"><img src="img/icons/spirit.png" alt=""><div class="value">{{ current_user.inventory.essences.spirit.current }}</div></div>
+            <div class="col s2 ha-mid va-mid" data-type="nomads"><img src="img/icons/nomads.png" alt=""><div class="value">{{ current_user.inventory.points.current }}</div></div>
+        </div>
+        <div id="shop_items">
+            {% for item in items -%}
+                <div class="item" data-item-id="{{ item.id }}" data-display-type="grid">
+                    <div class="limit">{{ item.limit|limit_translator }}</div>
+                    <div class="image" style="background-image: url('{{ address }}/static/product_images/{{ item.id }}/{{ item.images[0] }}');"></div>
+                    <div class="text">
+                        <div class="name">{{ item.name.pt }}</div><div class="price">
+                            <img src="img/icons/nomads.png" alt=""><span class="value">{{ item.cost }}</span>
+                        </div>
+                    </div>
+                    <i class="material-icons info">info_outline</i>
+                </div>
+            {%- endfor %}
+        </div>
+    </div>
+    <div class="tab" id="shop_item_page"></div>
+{% endblock %}
+
+{% block view_nav_type %}bottom{% endblock %}
+{% block view_nav_content %}
+    <div class="col s2 ha-mid va-mid"><img src="img/icons/search.png" id="lupa"></div>
+	<div class="col s10 ha-left va-mid"><input type="text" placeholder="Pesquisar item" id="shop_search"></div>
+{% endblock %}
+
+

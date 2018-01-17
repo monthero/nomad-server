@@ -1,0 +1,25 @@
+<div class="row header">
+    <div class="col s2 ha-left va-mid" id="item_page_back"><i class="material-icons">arrow_back</i></div>
+    <div class="col s10 ha-right va-mid"></div>
+</div>
+<div class="body">
+    <div id="item_images" class="swiper-container"><div class="swiper-wrapper">
+        {% for img in item.images -%}
+            <div class="swiper-slide" style="background-image: url('{{ address }}/static/product_images/{{ item.id }}/{{ img }}');"></div>
+        {%- endfor %}
+    </div><div class="swiper-pagination"></div></div>
+    <div id="item_name">{{ item.name.pt }}</div>
+    <div id="buy_item" class="row"><div class="col s12 va-mid ha-mid {{ "red" if item.cost > current_user.inventory.points.current else "" }}"><img src="img/icons/nomads.png"><div class="value">{{ item.cost }}</div><div class="buy">Comprar</div></div></div>
+    <div id="item_description">
+        <div class="langs">
+        {% for key in item.description.keys() %}
+            <div class="lang {{ "active" if key == 'pt' else "" }}" data-value="{{ key }}">{{ key|upper }}</div>
+        {% endfor %}
+        </div>
+        <div class="descriptions">
+        {% for key, value in item.description.items() %}
+            <div class="description {{ "show" if key == 'pt' else "" }}" data-lang="{{ key }}">{{ value }}</div>
+        {% endfor %}
+        </div>
+    </div>
+</div>

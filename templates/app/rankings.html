@@ -1,0 +1,91 @@
+{% extends "app/view_modal.html" %}
+
+{% block header_type %}regular{% endblock %}
+{% block header_content %}
+    <div class="col s2 ha-mid va-mid"><i class="material-icons">equalizer</i></div>
+	<div class="col s8 ha-left va-mid">Classificações</div>
+	<div class="col s2 ha-mid va-mid" id="close_view"><i class="material-icons">close</i></div>
+{% endblock %}
+{% block body_type %}rankings{% endblock %}
+{% block body_content %}
+    <div class="tab" data-tab="general" style="left: -100%;">
+        <div class="row"><div class="col s12 ha-left va-mid">individual: geral</div></div>
+        <div id="general_rank" class="rank_table">
+            {% for entry in general -%}
+                <div class="row" data-user-id="{{ entry.user.id }}" data-tribe="{{ entry.user.tribe }}">
+                    <div class="col s2 ha-mid va-mid">
+                        <div class="img" style="background-image: url('{{ address }}/static/user_images/{{ entry.user.id }}/0.jpg');">
+                            <img src="img/icons/{{ entry.user.tribe }}-tribe.png">
+                        </div>
+                    </div>
+                    <div class="col s6 ha-left va-mid">
+                        <span class="username">{{ entry.user.name }}</span><span class="points"><img src="img/icons/nomads.png">{{ entry.points }}</span>
+                    </div>
+                    <div class="col s4 ha-right va-mid">
+                        <div class="text"><span class="name">{{ entry.rank|rank_translator }}</span><span class="spot">rank {{ loop.index }}</span></div>
+                        <img src="img/icons/ranks/{{ entry.rank }}.png">
+                    </div>
+                </div>
+            {%- endfor %}
+        </div>
+    </div>
+    <div class="tab show" data-tab="weekly" style="left: 0;">
+        <div class="row"><div class="col s12 ha-left va-mid">individual: semanal</div></div>
+        <div id="weekly_rank" class="rank_table">
+            {% for entry in weekly -%}
+                <div class="row" data-user-id="{{ entry.user.id }}" data-tribe="{{ entry.user.tribe }}">
+                    <div class="col s2 ha-mid va-mid">
+                        <div class="img" style="background-image: url('{{ address }}/static/user_images/{{ entry.user.id }}/0.jpg');">
+                            <img src="img/icons/{{ entry.user.tribe }}-tribe.png">
+                        </div>
+                    </div>
+                    <div class="col s6 ha-left va-mid">
+                        <span class="username">{{ entry.user.name }}</span><span class="points"><img src="img/icons/nomads.png">{{ entry.points }}</span>
+                    </div>
+                    <div class="col s4 ha-right va-mid">
+                        <div class="text"><span class="name">{{ entry.rank|rank_translator }}</span><span class="spot">rank {{ loop.index }}</span></div>
+                        <img src="img/icons/ranks/{{ entry.rank }}.png">
+                    </div>
+                </div>
+            {%- endfor %}
+        </div>
+    </div>
+    <div class="tab" data-tab="tribes" style="left: 100%;">
+        <div class="row"><div class="col s12 ha-left va-mid">tribos: mensal</div></div>
+        <div id="tribes_rank" class="rank_table">
+            {% for entry in tribes -%}
+                <div class="row tribe" data-tribe="{{ entry.tribe }}">
+                    <div class="col s2 ha-mid va-mid"><img src="img/icons/{{ entry.tribe }}-tribe.png"></div>
+                    <div class="col s7 ha-left va-mid">
+                        <div class="tribe_name">{{ entry.tribe|tribe_translator }}</div>
+                        <div class="tribe_info">
+                            <div class="temples">
+                                <img src="img/icons/totem_neutral.png"><span>{{ entry.info.temples }}/{{ total_temples }}</span>
+                            </div><div class="tributes">
+                            <img src="img/icons/tribute.png"><span>{{ entry.info.points }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s3 ha-mid va-mid">
+                        {% if loop.index == 1 %}
+                            <img src="img/icons/gold.png">
+                        {% elif loop.index == 2 %}
+                            <img src="img/icons/silver.png">
+                        {% elif loop.index == 3 %}
+                            <img src="img/icons/bronze.png">
+                        {% endif %}
+                    </div>
+                </div>
+            {%- endfor  %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block view_nav_type %}bottom{% endblock %}
+{% block view_nav_content %}
+    <div class="col s4 ha-mid va-mid" data-type="nav-button" data-tab-option="general"><i class="material-icons">all_inclusive</i><span>geral</span></div>
+	<div class="col s4 ha-mid va-mid selected" data-type="nav-button" data-tab-option="weekly"><i class="material-icons">timer</i><span>semanal</span></div>
+    <div class="col s4 ha-mid va-mid" data-type="nav-button" data-tab-option="tribes"><i class="material-icons">group</i><span>tribos</span></div></div>
+{% endblock %}
+
+

@@ -1,0 +1,79 @@
+{% extends "admin_area.html" %}
+
+{% block title %}templo Nomad{% endblock %}
+
+{% block styles %}{% endblock %}
+{% block admin_title %}Templos{% endblock %}
+{% block active6 %}active{% endblock %}
+{% block content %}
+    <section class="temples">
+        <div class="row nav">
+            <div class="col s4 ha-left va-mid">Templos
+                <i class="material-icons add_new" id="add_new_temple"
+                   title="Adicionar Novo Templo">add_location</i>
+                <i class="material-icons add_new" id="manage_temple_categories"
+                   title="Gerir categorias dos templos">settings</i>
+            </div>
+            <div class="col s8 ha-right va-mid">
+                <button class="table_toggle pressed" data-value="active_temples">Activos</button>
+                <button class="table_toggle pressed" data-value="inactive_temples">Inactivos</button>
+            </div>
+        </div>
+        <div class="table temples" id="temples_list">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid"></div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option temples" data-action="hide"
+                       title="Desactivar templos selecionados">visibility_off</i>
+                    <i class="material-icons general_option temples" data-action="show"
+                       title="Activar templos selecionados">visibility</i>
+                    <i class="material-icons general_option temples" data-action="delete"
+                       title="Apagar templos selecionados">delete</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="active_temples_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="active_temples_toggle_check" class="general_toggle"
+                           data-table="temples_list">
+                </div>
+                <div class="col s4 ha-left va-mid">Nome</div>
+                <div class="col s2 ha-mid va-mid">temploização</div>
+                <div class="col s3 ha-left va-mid">Categoria(s)</div>
+                <div class="col s2 ha-mid va-mid"></div>
+            </div>
+            {% for s in temples %}
+                <div class="row temple" temple-id="{{ s.id }}"
+                     data-state="{{ 'active' if s.active else 'inactive' }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_temple_{{ s.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_temple_{{ s.id }}">
+                    </div>
+                    <div class="col s4 ha-left va-mid">{{ s.name.pt }}</div>
+                    <div class="col s2 ha-mid va-mid"><a
+                            title="{{ s.location.lat }}, {{ s.location.lng }}"
+                            href="https://www.google.com/maps/@{{ s.location.lat }},{{ s.location.lng }},20z"
+                            target="_blank"><i class="material-icons">location_on</i></a></div>
+                    <div class="col s3 ha-left va-mid">
+                        {% for t in s.types %}
+                            {{ t.name.pt|capitalize }}{{ ", " if not loop.last }}
+                        {% endfor %}
+                    </div>
+                    <div class="col s2 ha-mid va-mid noselect">
+                        <i class="material-icons temple_option" data-action="info"
+                           title="Mostrar detalhes do templo">info</i>
+                        <i class="material-icons temple_option" data-action="delete" title="Apagar templo">delete</i>
+                        <i class="material-icons temple_option"
+                           data-action="{{ 'hide' if s.active else 'show' }}"
+                           title="{{ 'Desactivar' if s.active else 'Activar' }} templo">{{ 'visibility_off' if s.active else 'visibility' }}</i>
+                    </div>
+                </div>
+                <div class="temple_info" for="{{ s.id }}"></div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

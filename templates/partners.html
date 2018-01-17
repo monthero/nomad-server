@@ -1,0 +1,144 @@
+{% extends "admin_area.html" %}
+
+{% block title %}Local Nomad{% endblock %}
+
+{% block styles %}{% endblock %}
+{% block admin_title %}Parceiros{% endblock %}
+{% block active4 %}active{% endblock %}
+{% block content %}
+    <section class="partners">
+        <div class="row nav">
+            <div class="col s4 ha-left va-mid">Parceiros <i class="material-icons add_new"
+                                                            id="add_new_partner"
+                                                            title="Adicionar Novo Parceiro">group_add</i>
+            </div>
+            <div class="col s8 ha-right va-mid">
+                <button class="table_toggle pressed" data-value="active_partners">Activos</button>
+                <button class="table_toggle pressed" data-value="inactive_partners">Inactivos</button>
+            </div>
+        </div>
+        <div class="table partners" id="active_partners">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Parceiros Activos</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option partners" data-action="delete"
+                       title="Apagar parcerias selecionadas">delete</i>
+                    <i class="material-icons general_option partners" data-action="hide"
+                       title="Desactivar parcerias selecionadas">visibility_off</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="active_partners_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="active_partners_toggle_check" class="general_toggle"
+                           data-table="active_partners">
+                </div>
+                <div class="col s4 ha-left va-mid">Nome</div>
+                <div class="col s4 ha-left va-mid">Link</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for p in active_partners %}
+                <div class="row partner" partner-id="{{ p.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_partner_{{ p.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_partner_{{ p.id }}">
+                    </div>
+                    <!--
+                                <div class="col s1 ha-mid va-mid">
+                                    {% if p.logo_img.type == 'url' %}
+                                        <img class="partner_logo" src="{{ p.logo_img.src }}" alt="Logo {{ p.name }}">
+                                    {% elif p.logo_img.type == 'static' %}
+                                        <img class="partner_logo" src="/static/partner_logos/{{ p.id }}.jpg" alt="Logo
+                                    {{ p.name }}">
+                                    {% else %}
+                                        <img class="partner_logo" src="/static/partner_logos/no_pic.jpg" alt="Logo
+                                    {{ p.name }}">
+                                    {% endif %}
+                                </div>
+                                -->
+                    <div class="col s4 ha-left va-mid">{{ p.name }}</div>
+
+                    {% if p.url %}
+                        <div class="col s4 ha-left va-mid"><a href="{{ p.url }}"
+                                                              target="_blank">{{ p.url }}</a></div>
+                    {% else %}
+                        <div class="col s4 ha-left va-mid">-</div>
+                    {% endif %}
+
+                    <div class="col s3 ha-mid va-mid noselect">
+                        <i class="material-icons partner_option" data-action="edit"
+                           title="Editar informação de parceria">edit</i>
+                        <i class="material-icons partner_option" data-action="delete"
+                           title="Apagar parceria">delete</i>
+                        <i class="material-icons partner_option" data-action="hide"
+                           title="Desactivar parceria">visibility_off</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="table partners" id="inactive_partners">
+            <div class="row title">
+                <div class="col s6 ha-left va-mid">Parceiros Inactivos</div>
+                <div class="col s6 ha-right va-mid noselect">
+                    <i class="material-icons general_option partners" data-action="delete"
+                       title="Apagar parcerias selecionadas">delete</i>
+                    <i class="material-icons general_option partners" data-action="show"
+                       title="Activar parcerias selecionadas">visibility</i>
+                </div>
+            </div>
+            <div class="row header noselect">
+                <div class="col s1 ha-mid va-mid">
+                    <label for="inactive_partners_toggle_check"><i
+                            class="material-icons">check_box_outline_blank</i></label>
+                    <input type="checkbox" id="inactive_partners_toggle_check" class="general_toggle"
+                           data-table="inactive_partners">
+                </div>
+                <!--<div class="col s1 ha-center va-mid"></div>-->
+                <div class="col s4 ha-left va-mid">Nome</div>
+                <div class="col s4 ha-left va-mid">Link</div>
+                <div class="col s3 ha-mid va-mid"></div>
+            </div>
+            {% for p in inactive_partners %}
+                <div class="row partner" partner-id="{{ p.id }}">
+                    <div class="col s1 ha-mid va-mid noselect">
+                        <label for="toggle_check_partner_{{ p.id }}"><i
+                                class="material-icons">check_box_outline_blank</i></label>
+                        <input type="checkbox" id="toggle_check_partner_{{ p.id }}">
+                    </div>
+                    <!--
+                                <div class="col s1 ha-mid va-mid">
+                                    {% if p.logo_img.type == 'url' %}
+                                        <img class="partner_logo" src="{{ p.logo_img.src }}" alt="Logo {{ p.name }}">
+                                    {% elif p.logo_img.type == 'static' %}
+                                        <img class="partner_logo" src="/static/partner_logos/{{ p.id }}.jpg" alt="Logo
+                                    {{ p.name }}">
+                                    {% else %}
+                                        <img class="partner_logo" src="/static/partner_logos/no_pic.jpg" alt="Logo
+                                    {{ p.name }}">
+                                    {% endif %}
+                                </div>
+                                -->
+                    <div class="col s4 ha-left va-mid">{{ p.name }}</div>
+                    {% if p.url %}
+                        <div class="col s4 ha-left va-mid"><a href="{{ p.url }}"
+                                                              target="_blank">{{ p.url }}</a></div>
+                    {% else %}
+                        <div class="col s4 ha-left va-mid">-</div>
+                    {% endif %}
+                    <div class="col s3 ha-mid va-mid noselect">
+                        <i class="material-icons partner_option" data-action="edit"
+                           title="Editar informação de parceria">edit</i>
+                        <i class="material-icons partner_option" data-action="delete"
+                           title="Apagar parceria">delete</i>
+                        <i class="material-icons partner_option" data-action="show"
+                           title="Activar parceria">visibility</i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}
