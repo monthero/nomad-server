@@ -1049,7 +1049,7 @@ def testes():
 def socket_connect():
     if getattr(current_user, 'id', None) is not None:
         print(str(request.sid) + " -> " + current_user.username + " connected")
-        emit('chat', {'channel': 'general', 'text': 'hey bitchesssssssssss', 'time': str(arrow.utcnow().datetime),
+        emit('chat', {'channel': 'general', 'text': 'hey guys', 'time': str(arrow.utcnow().datetime),
                       'user': User.query.get(3).to_chat_json()}, broadcast=True)
     else:
         print(str(request.sid) + " -> unknown connected")
