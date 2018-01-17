@@ -1027,28 +1027,8 @@ def get_app_view():
 @app.route('/testes', methods=['GET', 'POST'])
 def testes():
     # from langdetect import detect, detect_langs
-    # print detect(u"Estas views não são muito importantes, o que é importante é pensar em fazer reset ao router")
-    # print detect("Buenos dias por la ciencia")
-    # print detect_langs(u"Transformers foi um filme de porcaria, can not wait to see the próximo")
-    # me = User.query.filter_by(username="monty").first()
-    # print [x.username for x in me.get_friend_list()]
-    '''
-    db.session.add(FriendRequest(src=1, dest=2, accepted=True))
-    db.session.add(FriendRequest(src=1, dest=3, accepted=False))
-    db.session.add(FriendRequest(src=1, dest=4, accepted=False))
-    db.session.add(FriendRequest(src=5, dest=1, accepted=False))
-    db.session.add(FriendRequest(src=6, dest=1, accepted=False))
-    db.session.commit()
-    '''
-    '''
-    action = request.json['action']
-        temple = Spot.query.get(int(request.json['temple_id']))
-        if temple:
-            res = current_user.execute_temple_action(temple=temple,
-                                                     action=request.json['action'],
-                                                     pos=request.json['pos'])
-            db.session.commit()
-    '''
+    # print detect()
+    # print detect_langs()
     '''
     import random as r
     temples_ids = [t.id for t in Temple.query.filter_by(active=True).all()]
@@ -1060,10 +1040,8 @@ def testes():
         user.execute_temple_action(temple=temple, action="collect", pos=temple.geometry['location'])
         user.execute_temple_action(temple=temple, action="tribute", pos=temple.geometry['location'])
     '''
-    me = User.query.get(1)
-    # print([si.name['pt'] for si in ShopItem.query.order_by(cast(ShopItem.name['pt'], String)).all()])
 
-    return jsonify(me.progress)
+    return jsonify("ok")
 
 
 # connect socket
