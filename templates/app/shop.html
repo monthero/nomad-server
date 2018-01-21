@@ -26,14 +26,16 @@
         <div id="shop_items">
             {% for item in items -%}
                 <div class="item" data-item-id="{{ item.id }}" data-display-type="grid">
-                    <div class="limit">{{ item.limit|limit_translator }}</div>
+                    <div class="info row">
+                        <div class="col s8 ha-left va-mid">{{ item.limit|limit_translator }}</div>
+                        <div class="col s4 ha-right va-mid"><i class="material-icons">info_outline</i></div>
+                    </div>
                     <div class="image" style="background-image: url('{{ address }}/static/product_images/{{ item.id }}/{{ item.images[0] }}');"></div>
                     <div class="text">
                         <div class="name">{{ item.name.pt }}</div><div class="price">
-                            <img src="img/icons/nomads.png" alt=""><span class="value">{{ item.cost }}</span>
+                            <img src="img/icons/nomads.png" alt=""><span class="value {{ "red" if item.cost > current_user.inventory.points.current else "" }}">{{ item.cost }}</span>
                         </div>
                     </div>
-                    <i class="material-icons info">info_outline</i>
                 </div>
             {%- endfor %}
         </div>

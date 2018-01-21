@@ -827,7 +827,6 @@ def user_temple_action():
             flag_modified(current_user, 'inventory')
             flag_modified(current_user, 'actions')
             flag_modified(current_user, 'progress')
-            flag_modified(current_user, 'activity_log')
             flag_modified(temple, 'tribe_points')
 
             db.session.commit()
@@ -1015,10 +1014,25 @@ def get_app_view():
             else:
                 return jsonify(dict(code=0))
         elif action == 'temple':
-            return render_template("app/temple.html",
-                                   address=address,
-                                   temple=Temple.query.get(1)
-                                   )
+            temple = Temple.query.get(int(info['temple_id']))
+            if temple:
+                res = current_user.execute_temple_action(temple=temple,
+                                                         action='visit',
+                                                         pos=info['pos'])
+
+                flag_modified(current_user, 'inventory')
+                flag_modified(current_user, 'actions')
+                flag_modified(current_user, 'progress')
+                flag_modified(temple, 'tribe_points')
+
+                db.session.commit()
+                # return jsonify(dict(code=1, action_result=res))
+                return render_template("app/temple.html",
+                                       address=address,
+                                       temple=temple.to_json(),
+                                       in_range=res['in_range']
+                                       )
+            return jsonify(dict(code=0))
 
     else:
         return jsonify(dict(code=-1))

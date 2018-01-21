@@ -1,10 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<div id="view_modal" data-conqueror="{{ temple.conqueror }}" data-temple-id="{{ temple.id }}">
+    <div class="header row" data-type="temple" id="temple_header">
+        <div class="col s6 ha-left va-mid"><i class="material-icons" data-action="exchange">swap_horiz</i></div>
+	    <div class="col s6 ha-right va-mid"><i class="material-icons" data-action="close">close</i></div>
+    </div>
+    <div id="temple_body" class="body" data-type="temple">
+        <div class="tab show" data-display="main">
+            {% if temple.images|length > 0 %}
+                <div id="temple_images" class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for i in temple.images %}
+                            <div class="swiper-slide" style="background-image: url('{{ address }}/{{ i }}');"></div>
+                        {% endfor %}
+                    </div>
+                    {% if temple.images|length > 1 %}<div class="swiper-pagination"></div>{% endif %}
+                </div>
+            {% endif %}
+            <div id="temple_name">{{ temple.name.pt }}</div>
+            <div id="temple_types">
+                {% for cat in temple.categories -%}
+                    <div class="temple_type ib va-mid">
+                        <img class="ib va-mid" src="img/icons/spot_type_icons/{{ cat.name.en }}.png">
+                        <span class="ib va-mid">{{ cat.name.pt }}</span>
+                    </div>
+                {%- endfor %}
+            </div>
+            <div id="temple_my_inventory" class="row">
+                {% for elem, values in current_user.inventory.essences.items() %}
+                    <div class="essence_count col ha-mid va-mid" data-element="{{ elem }}">
+                        <img src="img/icons/{{ elem }}.png">
+                        <div class="count">{{ values.current }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="temple_actions">
+                <div class="ib va-mid ha-mid action {{ "" if in_range else "oor" }}" data-action="collect">
+                    <div class="row">
+                        <div class="col s12 va-mid ha-mid">
+                            <i class="material-icons">bubble_chart</i><span>Recolha</span></div>
+                    </div>
+                </div><div class="ib va-mid ha-mid action {{ "" if in_range else "oor" }}" data-action="tribute">
+                    <div class="row">
+                        <div class="col s12 va-mid ha-mid">
+                            <i class="material-icons">accessibility</i><span>Tributo</span></div>
+                    </div>
+                </div>
+            </div>
+            <div id="temple_info_toggle">
+                <span>Ver informações</span><i class="material-icons">info_outline</i>
+            </div>
+            {% if in_range %}
+                <div id="temple_range_warning" style="display: none;">Templo fora do alcance</div>
+            {% else %}
+                <div id="temple_range_warning">Templo fora do alcance</div>
+            {% endif %}
+            <div id="temple_point_count" class="row">
+                {% for elem, count in temple.tribe_point_count.items() %}
+                    <div class="essence_count col ha-mid va-mid" data-element="{{ elem }}">
+                        <img src="img/icons/{{ elem }}-tribe.png">
+                        <div class="count ha-mid">{{ count }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab" data-display="info">
+            <div class="name">{{ temple.name.pt }}</div>
+            <div class="location">
+                <i class="material-icons">location_on</i><span
+                    class="coords">{{ temple.location.lat }}, {{ temple.location.lng }}</span>
+            </div>
+            <div class="title row"><div class="col s12 ha-left va-mid">Estatísticas</div></div>
+            <div id="temple_stats" class="block">
+                <div class="title row">
+                    <div class="col s4 ha-mid va-top">visitas</div>
+                    <div class="col s4 ha-mid va-top">recolhas</div>
+                    <div class="col s4 ha-mid va-top">tributos</div>
+                </div>
+                <div class="stats row">
+                    {% for action, action_info in temple.activity_stats.items() %}
+                        <div class="col s4 ha-left va-top" data-type="{{ action }}">
+                            {% set total = action_info.stats.total|int %}
+                            {% for elem, value in action_info.stats.items() %}
+                                {% if elem != 'total' %}
+                                {#%set pc = 0 if value == 0 else value|string + " (" + (value / total * 100.0)|round(0, 'common') + "%)" %#}
+                                <div class="row">
+                                    <div class="col s3 ha-left va-mid"><img src="img/icons/{{ elem }}-tribe.png"></div>
+                                    <div class="col s9 ha-left va-mid" data-elem="{{ elem }}">{{ value }}</div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="row">
+                                <div class="col s3 ha-left va-mid">Total</div>
+                                <div class="col s9 ha-left va-mid" data-elem="total">{{ total }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="title row"><div class="col s12 ha-left va-mid">Actividade recente</div></div>
+            <div id="temple_recent_activity" class="block">
+                <div class="title row">
+                    <div class="col s4 ha-mid va-top">visitas</div>
+                    <div class="col s4 ha-mid va-top">recolhas</div>
+                    <div class="col s4 ha-mid va-top">tributos</div>
+                </div>
+                <div class="row activity">
+                    {% for action, action_info in temple.activity_stats.items() %}
+                        <div class="col s4 ha-left va-top" data-type="{{ action }}">
+                            {% for entry in action_info.recent %}
+                                <div class="entry row" data-user-id="{{ entry.id }}">
+                                    <div class="col s3 ha-left va-mid"><img src="img/icons/{{ entry.tribe }}-tribe.png"></div>
+                                    <div class="col s9 ha-left va-mid">{{ entry.name }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="title row"><div class="col s12 ha-left va-mid">informação</div></div>
+		    <div class="description">{{ temple.description.pt if temple.description.pt else "De momento este templo não contém informação adicional" }}</div>
+        </div>
+    </div>
+
+    <div id="tribe_tribute_hover" class="row"><div class="col s12 va-mid ha-mid"></div></div>
+</div>

@@ -601,11 +601,12 @@ class User(Base):
                 temple.update_activity(action=action, user=dict(id=self.id,
                                                                 username=self.username,
                                                                 tribe=self.tribe.element['en']))
-
+                '''
                 self.activity_log.insert(0, dict(action=action,
                                                  date=str(now.datetime),
                                                  temple=dict(id=int(temple.id), name=temple.name['pt'])
                                                  ))
+                '''
                 if len(self.actions[action][tid]) > 0:
                     last = arrow.get(self.actions[action][tid][0]).datetime
                     # if difference less than 3 minutes, not valid
@@ -624,18 +625,21 @@ class User(Base):
                 self.progress = self.verify_achievement_progress(family=action)
 
                 return {
-                    'temple_info': temple.to_json(),
-                    'inventory': self.inventory,
-                    'progress': self.progress,
-                    'actions': self.actions,
-                    'level_changed': level_changed,
-                    'to_next_level': self.to_next_level(),
+                    # 'temple_info': temple.to_json(),
+                    # 'inventory': self.inventory,
+                    # 'progress': self.progress,
+                    # 'actions': self.actions,
+                    # 'level_changed': level_changed,
+                    # 'to_next_level': self.to_next_level(),
                     'in_range': True
                 }
             else:
                 return 0
         if action == 'visit':
-            return {'temple_info': temple.to_json(), 'in_range': False}
+            return {
+                # 'temple_info': temple.to_json(),
+                'in_range': False
+            }
         return -1
 
     def verify_achievement_progress(self, family):
